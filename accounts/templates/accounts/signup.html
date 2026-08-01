@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account - Serviqo</title>
+</head>
+<body>
+
+    <h1>Create Your Serviqo Account</h1>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Create Free Account
+        </button>
+
+    </form>
+
+</body>
+</html>
