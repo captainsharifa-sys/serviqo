@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Business</title>
+</head>
+
+<body>
+
+<h1>Create Your Business 🚀</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">
+Save Business
+</button>
+
+</form>
+
+</body>
+
+</html>
