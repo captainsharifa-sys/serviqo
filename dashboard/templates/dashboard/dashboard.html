@@ -1,38 +1,37 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Serviqo Dashboard</title>
-</head>
+{% block title %}
+Dashboard
+{% endblock %}
 
-<body>
+{% block content %}
 
 <h1>Welcome {{ request.user.username }} 👋</h1>
-
 
 {% if business %}
 
 <h2>Your Business</h2>
 
+<p><strong>Name:</strong> {{ business.name }}</p>
+
+<p><strong>Category:</strong> {{ business.category }}</p>
+
+<p><strong>Phone:</strong> {{ business.phone }}</p>
+
+<p><strong>Address:</strong> {{ business.address }}</p>
+
 <p>
-<strong>Name:</strong> {{ business.name }}
+    <a href="{% url 'services' %}">
+        <button>Manage Services</button>
+    </a>
 </p>
 
 <p>
-<strong>Category:</strong> {{ business.category }}
+    <a href="{% url 'working_hours' %}">
+        <button>Manage Working Hours</button>
+    </a>
 </p>
 
-<p>
-<strong>Phone:</strong> {{ business.phone }}
-</p>
-
-<p>
-<strong>Address:</strong> {{ business.address }}
-</p>
-
-<a href="{% url 'services' %}">
-    <button>Manage Services</button>
-</a>
 {% else %}
 
 <h2>No Business Yet</h2>
@@ -43,7 +42,4 @@
 
 {% endif %}
 
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Serviqo{% endblock %}</title>
+</head>
+<body>
+
+    <nav>
+        <h2>Serviqo</h2>
+
+        <a href="{% url 'dashboard' %}">Dashboard</a> |
+        <a href="{% url 'services' %}">Services</a> |
+        <a href="{% url 'working_hours' %}">Working Hours</a>
+    </nav>
+
+    <hr>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

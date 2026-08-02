@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Working Hours</title>
+</head>
+
+<body>
+
+<h1>My Working Hours</h1>
+
+
+<form method="POST">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">
+Add Working Hour
+</button>
+
+</form>
+
+
+<hr>
+
+
+{% for hour in hours %}
+
+<p>
+
+<strong>
+{{ hour.day }}
+</strong>
+
+<br>
+
+{% if hour.is_closed %}
+
+Closed
+
+{% else %}
+
+{{ hour.open_time }} -
+{{ hour.close_time }}
+
+{% endif %}
+
+</p>
+
+<hr>
+
+{% empty %}
+
+<p>
+No working hours added yet.
+</p>
+
+{% endfor %}
+
+
+</body>
+
+</html>

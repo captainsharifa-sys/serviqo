@@ -15,12 +15,13 @@ class Business(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 class Service(models.Model):
+
     business = models.ForeignKey(
         Business,
         on_delete=models.CASCADE,
         related_name="services"
     )
-
+    
     name = models.CharField(max_length=200)
 
     price = models.DecimalField(
@@ -31,12 +32,42 @@ class Service(models.Model):
     duration = models.PositiveIntegerField(
         help_text="Duration in minutes"
     )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
     
+    created_at = models.DateTimeField(auto_now_add=True)
+class WorkingHour(models.Model):
+
+    DAYS = [
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+        ("Sunday", "Sunday"),
+    ]
+
+    business = models.ForeignKey(
+        Business,
+        on_delete=models.CASCADE,
+        related_name="working_hours"
+    )
+
+    day = models.CharField(max_length=20, choices=DAYS)
+
+    open_time = models.TimeField()
+
+    close_time = models.TimeField()
+
+    is_closed = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("business", "day")
+
+    def __str__(self):
+        return f"{self.business.name} - {self.day}"
+    
+    def __str__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
