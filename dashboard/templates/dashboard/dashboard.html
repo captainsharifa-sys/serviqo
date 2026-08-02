@@ -1,23 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Dashboard - Serviqo</title>
+    <title>Serviqo Dashboard</title>
 </head>
+
 <body>
 
-<h1>Welcome to Serviqo Dashboard 👋</h1>
+<h1>Welcome {{ request.user.username }} 👋</h1>
 
-<p>Hello, {{ request.user.username }}!</p>
 
-<hr>
+{% if business %}
 
 <h2>Your Business</h2>
+
+<p>
+<strong>Name:</strong> {{ business.name }}
+</p>
+
+<p>
+<strong>Category:</strong> {{ business.category }}
+</p>
+
+<p>
+<strong>Phone:</strong> {{ business.phone }}
+</p>
+
+<p>
+<strong>Address:</strong> {{ business.address }}
+</p>
+
+
+{% else %}
+
+<h2>No Business Yet</h2>
 
 <a href="{% url 'create_business' %}">
     <button>Create My Business</button>
 </a>
 
-<button>Create My Business</button>
+{% endif %}
+
 
 </body>
+
 </html>

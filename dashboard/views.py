@@ -2,12 +2,21 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .forms import BusinessForm
+from .models import Business
 
 
 @login_required
 def dashboard(request):
-    return render(request, "dashboard/dashboard.html")
 
+    business = Business.objects.filter(owner=request.user).first()
+
+    return render(
+        request,
+        "dashboard/dashboard.html",
+        {
+            "business": business
+        }
+    )
 
 @login_required
 def create_business(request):
@@ -16,6 +25,10 @@ def create_business(request):
         form = BusinessForm(request.POST)
 
         if form.is_valid():
+
+            if Business.objects.filter(owner=request.user).exists():
+                return redirect("dashboard")
+
             business = form.save(commit=False)
             business.owner = request.user
             business.save()
