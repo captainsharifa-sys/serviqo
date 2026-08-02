@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Services</title>
+</head>
+<body>
+
+<h1>My Services</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Service</button>
+</form>
+
+<hr>
+
+{% for service in services %}
+
+<p>
+<strong>{{ service.name }}</strong><br>
+Price: ${{ service.price }}<br>
+Duration: {{ service.duration }} minutes
+</p>
+
+<hr>
+
+{% empty %}
+
+<p>No services yet.</p>
+
+{% endfor %}
+
+</body>
+</html>

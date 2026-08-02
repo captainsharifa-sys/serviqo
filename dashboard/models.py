@@ -14,6 +14,29 @@ class Business(models.Model):
     address = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True)
+class Service(models.Model):
+    business = models.ForeignKey(
+        Business,
+        on_delete=models.CASCADE,
+        related_name="services"
+    )
+
+    name = models.CharField(max_length=200)
+
+    price = models.DecimalField(
+        max_digits=8,
+        decimal_places=2
+    )
+
+    duration = models.PositiveIntegerField(
+        help_text="Duration in minutes"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+    def __str__(self):
+        return self.name
+    

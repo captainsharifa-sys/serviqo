@@ -30,7 +30,9 @@
 <strong>Address:</strong> {{ business.address }}
 </p>
 
-
+<a href="{% url 'services' %}">
+    <button>Manage Services</button>
+</a>
 {% else %}
 
 <h2>No Business Yet</h2>
