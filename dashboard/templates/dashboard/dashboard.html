@@ -6,39 +6,63 @@ Dashboard
 
 {% block content %}
 
-<h1>Welcome {{ request.user.username }} 👋</h1>
+<h1 class="mb-4">
+    Welcome, {{ request.user.username }} 👋
+</h1>
 
 {% if business %}
 
-<h2>Your Business</h2>
+<div class="card shadow">
 
-<p><strong>Name:</strong> {{ business.name }}</p>
+    <div class="card-header bg-primary text-white">
+        <h4>Your Business</h4>
+    </div>
 
-<p><strong>Category:</strong> {{ business.category }}</p>
+    <div class="card-body">
 
-<p><strong>Phone:</strong> {{ business.phone }}</p>
+        <p><strong>Name:</strong> {{ business.name }}</p>
 
-<p><strong>Address:</strong> {{ business.address }}</p>
+        <p><strong>Category:</strong> {{ business.category }}</p>
 
-<p>
-    <a href="{% url 'services' %}">
-        <button>Manage Services</button>
-    </a>
-</p>
+        <p><strong>Phone:</strong> {{ business.phone }}</p>
 
-<p>
-    <a href="{% url 'working_hours' %}">
-        <button>Manage Working Hours</button>
-    </a>
-</p>
+        <p><strong>Address:</strong> {{ business.address }}</p>
+
+        <hr>
+
+        <a href="{% url 'services' %}"
+           class="btn btn-success">
+            Manage Services
+        </a>
+
+        <a href="{% url 'working_hours' %}"
+           class="btn btn-warning">
+            Working Hours
+        </a>
+      
+        <a href="{% url 'appointments' %}"
+   class="btn btn-info">
+    Appointments
+      </a>
+
+    </div>
+
+</div>
 
 {% else %}
 
-<h2>No Business Yet</h2>
+<div class="alert alert-info">
 
-<a href="{% url 'create_business' %}">
-    <button>Create My Business</button>
-</a>
+    <h3>No Business Yet</h3>
+
+    <a href="{% url 'create_business' %}"
+       class="btn btn-primary">
+
+        Create My Business
+
+    </a>
+
+</div>
 
 {% endif %}
 

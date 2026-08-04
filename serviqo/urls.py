@@ -22,5 +22,6 @@ urlpatterns = [
     path("", include("core.urls")),
     path("", include("accounts.urls")),
     path("", include("dashboard.urls")),
+    path("", include("appointments.urls")),
 
 ]

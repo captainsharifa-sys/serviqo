@@ -14,6 +14,11 @@ class Business(models.Model):
     address = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Service(models.Model):
 
     business = models.ForeignKey(
@@ -21,7 +26,7 @@ class Service(models.Model):
         on_delete=models.CASCADE,
         related_name="services"
     )
-    
+
     name = models.CharField(max_length=200)
 
     price = models.DecimalField(
@@ -32,8 +37,13 @@ class Service(models.Model):
     duration = models.PositiveIntegerField(
         help_text="Duration in minutes"
     )
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class WorkingHour(models.Model):
 
     DAYS = [
@@ -52,7 +62,10 @@ class WorkingHour(models.Model):
         related_name="working_hours"
     )
 
-    day = models.CharField(max_length=20, choices=DAYS)
+    day = models.CharField(
+        max_length=20,
+        choices=DAYS
+    )
 
     open_time = models.TimeField()
 
@@ -65,9 +78,3 @@ class WorkingHour(models.Model):
 
     def __str__(self):
         return f"{self.business.name} - {self.day}"
-    
-    def __str__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
