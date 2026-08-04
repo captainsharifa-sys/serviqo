@@ -71,3 +71,16 @@ def appointments_list(request):
             "appointments": appointments
         }
     )
+@login_required
+def confirm_appointment(request, appointment_id):
+
+    appointment = get_object_or_404(
+        Appointment,
+        id=appointment_id,
+        business__owner=request.user
+    )
+
+    appointment.status = "Confirmed"
+    appointment.save()
+
+    return redirect("appointments")

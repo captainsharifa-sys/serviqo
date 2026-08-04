@@ -17,6 +17,7 @@ Appointments
     <th>Date</th>
     <th>Time</th>
     <th>Status</th>
+    <th>Action</th>
 </tr>
 
 
@@ -43,7 +44,24 @@ Appointments
 <td>
 {{ appointment.status }}
 </td>
+<td>
 
+{% if appointment.status == "Pending" %}
+
+<a href="{% url 'confirm_appointment' appointment.id %}"
+   class="btn btn-success btn-sm">
+
+    Confirm
+
+</a>
+
+{% else %}
+
+—
+
+{% endif %}
+
+</td>
 </tr>
 
 {% empty %}

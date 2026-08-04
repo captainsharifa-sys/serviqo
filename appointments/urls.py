@@ -16,4 +16,10 @@ urlpatterns = [
         name="appointments",
     ),
 
+    path(
+        "appointments/<int:appointment_id>/confirm/",
+        views.confirm_appointment,
+        name="confirm_appointment",
+    ),
+
 ]

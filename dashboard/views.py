@@ -1,22 +1,52 @@
+from datetime import date
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from appointments.models import Appointment
 
 from .forms import BusinessForm
 from .service_forms import ServiceForm
 from .working_forms import WorkingHourForm
-
 from .models import Business, Service, WorkingHour
+
 
 @login_required
 def dashboard(request):
 
-    business = Business.objects.filter(owner=request.user).first()
+    business = Business.objects.filter(
+        owner=request.user
+    ).first()
+
+    total_services = 0
+    total_working_hours = 0
+    total_appointments = 0
+    today_appointments = []
+
+    if business:
+
+        total_services = business.services.count()
+
+        total_working_hours = business.working_hours.count()
+
+        total_appointments = Appointment.objects.filter(
+            business=business
+        ).count()
+
+        today_appointments = Appointment.objects.filter(
+            business=business,
+            appointment_date=date.today()
+        ).order_by("appointment_time")
 
     return render(
         request,
         "dashboard/dashboard.html",
         {
-            "business": business
+            "business": business,
+            "total_services": total_services,
+            "total_working_hours": total_working_hours,
+            "total_appointments": total_appointments,
+            "today_appointments": today_appointments,
         }
     )
 
@@ -25,6 +55,7 @@ def dashboard(request):
 def create_business(request):
 
     if request.method == "POST":
+
         form = BusinessForm(request.POST)
 
         if form.is_valid():
@@ -39,6 +70,7 @@ def create_business(request):
             return redirect("dashboard")
 
     else:
+
         form = BusinessForm()
 
     return render(
@@ -52,12 +84,15 @@ def create_business(request):
 
 @login_required
 def services(request):
+
     business = Business.objects.get(owner=request.user)
 
     if request.method == "POST":
+
         form = ServiceForm(request.POST)
 
         if form.is_valid():
+
             service = form.save(commit=False)
             service.business = business
             service.save()
@@ -65,9 +100,12 @@ def services(request):
             return redirect("services")
 
     else:
+
         form = ServiceForm()
 
-    services = Service.objects.filter(business=business)
+    services = Service.objects.filter(
+        business=business
+    )
 
     return render(
         request,
@@ -77,6 +115,8 @@ def services(request):
             "services": services,
         }
     )
+
+
 @login_required
 def working_hours(request):
 
@@ -95,6 +135,7 @@ def working_hours(request):
             return redirect("working_hours")
 
     else:
+
         form = WorkingHourForm()
 
     hours = WorkingHour.objects.filter(
@@ -109,5 +150,3 @@ def working_hours(request):
             "hours": hours,
         }
     )
-    
-        

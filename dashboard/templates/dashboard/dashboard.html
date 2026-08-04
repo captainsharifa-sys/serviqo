@@ -6,64 +6,225 @@ Dashboard
 
 {% block content %}
 
-<h1 class="mb-4">
-    Welcome, {{ request.user.username }} 👋
-</h1>
+<h2 class="mb-4">
+    👋 Welcome, {{ request.user.username }}
+</h2>
+
 
 {% if business %}
 
-<div class="card shadow">
-
-    <div class="card-header bg-primary text-white">
-        <h4>Your Business</h4>
-    </div>
+<div class="card shadow-sm mb-4">
 
     <div class="card-body">
 
-        <p><strong>Name:</strong> {{ business.name }}</p>
+        <h3>{{ business.name }}</h3>
 
-        <p><strong>Category:</strong> {{ business.category }}</p>
+        <p class="text-muted">
 
-        <p><strong>Phone:</strong> {{ business.phone }}</p>
+            {{ business.category }}
 
-        <p><strong>Address:</strong> {{ business.address }}</p>
+        </p>
 
-        <hr>
+        <p>
 
-        <a href="{% url 'services' %}"
-           class="btn btn-success">
-            Manage Services
-        </a>
+            📞 {{ business.phone }}
 
-        <a href="{% url 'working_hours' %}"
-           class="btn btn-warning">
-            Working Hours
-        </a>
-      
-        <a href="{% url 'appointments' %}"
-   class="btn btn-info">
-    Appointments
-      </a>
+        </p>
+
+        <p>
+
+            📍 {{ business.address }}
+
+        </p>
 
     </div>
+
+</div>
+
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<h5>Total Services</h5>
+
+<h1 class="text-primary">
+
+{{ total_services }}
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-md-4 mb-3">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<h5>Working Days</h5>
+
+<h1 class="text-success">
+
+{{ total_working_hours }}
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-md-4 mb-3">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<h5>Appointments</h5>
+
+<h1 class="text-danger">
+
+{{ total_appointments }}
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="mt-5">
+
+<h4>
+
+Quick Actions
+
+</h4>
+
+<a href="{% url 'services' %}" class="btn btn-primary me-2">
+Manage Services
+</a>
+
+<a href="{% url 'working_hours' %}" class="btn btn-success me-2">
+Working Hours
+</a>
+
+<a href="{% url 'appointments' %}" class="btn btn-warning">
+Appointments
+</a>
 
 </div>
 
 {% else %}
 
-<div class="alert alert-info">
+<div class="alert alert-warning">
 
-    <h3>No Business Yet</h3>
-
-    <a href="{% url 'create_business' %}"
-       class="btn btn-primary">
-
-        Create My Business
-
-    </a>
+You haven't created a business yet.
 
 </div>
 
-{% endif %}
+<a href="{% url 'create_business' %}" class="btn btn-primary">
 
+Create Business
+
+</a>
+
+{% endif %}
+<hr class="my-5">
+
+<h3 class="mb-4">
+    📅 Today's Appointments
+</h3>
+
+
+{% if today_appointments %}
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+                    <th>Time</th>
+                    <th>Customer</th>
+                    <th>Service</th>
+                    <th>Phone</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for appointment in today_appointments %}
+
+                <tr>
+
+                    <td>
+                        {{ appointment.appointment_time }}
+                    </td>
+
+
+                    <td>
+                        {{ appointment.customer_name }}
+                    </td>
+
+
+                    <td>
+                        {{ appointment.service.name }}
+                    </td>
+
+
+                    <td>
+                        {{ appointment.customer_phone }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+</div>
+
+
+{% else %}
+
+
+<div class="alert alert-info">
+
+    No appointments scheduled for today.
+
+</div>
+
+
+{% endif %}
 {% endblock %}
