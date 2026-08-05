@@ -4,77 +4,141 @@
 Appointments
 {% endblock %}
 
-
 {% block content %}
 
-<h2>Your Appointments</h2>
+<h2 class="mb-4">
+    Appointments
+</h2>
 
-<table class="table table-striped">
+<div class="card shadow-sm">
+
+<div class="card-body">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
 
 <tr>
-    <th>Customer</th>
-    <th>Service</th>
-    <th>Date</th>
-    <th>Time</th>
-    <th>Status</th>
-    <th>Action</th>
+
+<th>Customer</th>
+<th>Service</th>
+<th>Date</th>
+<th>Time</th>
+<th>Status</th>
+<th>Actions</th>
+
 </tr>
 
+</thead>
+
+<tbody>
 
 {% for appointment in appointments %}
 
 <tr>
 
-<td>
-{{ appointment.customer_name }}
-</td>
+<td>{{ appointment.customer_name }}</td>
+
+<td>{{ appointment.service.name }}</td>
+
+<td>{{ appointment.appointment_date }}</td>
+
+<td>{{ appointment.appointment_time }}</td>
 
 <td>
-{{ appointment.service.name }}
+
+{% if appointment.status == "Pending" %}
+
+<span class="badge bg-warning text-dark">
+Pending
+</span>
+
+{% elif appointment.status == "Confirmed" %}
+
+<span class="badge bg-success">
+Confirmed
+</span>
+
+{% elif appointment.status == "Completed" %}
+
+<span class="badge bg-primary">
+Completed
+</span>
+
+{% elif appointment.status == "Cancelled" %}
+
+<span class="badge bg-danger">
+Cancelled
+</span>
+
+{% endif %}
+
 </td>
 
-<td>
-{{ appointment.appointment_date }}
-</td>
-
-<td>
-{{ appointment.appointment_time }}
-</td>
-
-<td>
-{{ appointment.status }}
-</td>
 <td>
 
 {% if appointment.status == "Pending" %}
 
 <a href="{% url 'confirm_appointment' appointment.id %}"
-   class="btn btn-success btn-sm">
-
-    Confirm
-
+class="btn btn-success btn-sm">
+Confirm
 </a>
 
-{% else %}
+<a href="{% url 'cancel_appointment' appointment.id %}"
+class="btn btn-danger btn-sm">
+Cancel
+</a>
 
-—
+{% elif appointment.status == "Confirmed" %}
+
+<a href="{% url 'complete_appointment' appointment.id %}"
+class="btn btn-primary btn-sm">
+Complete
+</a>
+
+<a href="{% url 'cancel_appointment' appointment.id %}"
+class="btn btn-danger btn-sm">
+Cancel
+</a>
+
+{% elif appointment.status == "Completed" %}
+
+<span class="text-success fw-bold">
+✔ Finished
+</span>
+
+{% elif appointment.status == "Cancelled" %}
+
+<span class="text-danger fw-bold">
+✖ Cancelled
+</span>
 
 {% endif %}
 
 </td>
+
 </tr>
 
 {% empty %}
 
 <tr>
-<td colspan="5">
+
+<td colspan="6" class="text-center">
+
 No appointments yet.
+
 </td>
+
 </tr>
 
 {% endfor %}
 
+</tbody>
 
 </table>
+
+</div>
+
+</div>
 
 {% endblock %}

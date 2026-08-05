@@ -1,25 +1,279 @@
 {% extends "base.html" %}
 
+
 {% block title %}
 Book Appointment
 {% endblock %}
 
+
+
 {% block content %}
 
-<h2>Book Appointment</h2>
 
-<h4>{{ business.name }}</h4>
+<div class="card shadow-sm">
+
+<div class="card-body">
+
+
+<h2>
+Book Appointment
+</h2>
+
+
+<h4 class="text-primary">
+{{ business.name }}
+</h4>
+
+
+<hr>
+
 
 <form method="POST">
 
-    {% csrf_token %}
+{% csrf_token %}
 
-    {{ form.as_p }}
 
-    <button class="btn btn-primary" type="submit">
-        Book Appointment
-    </button>
+
+<div class="mb-3">
+
+<label>
+Service
+</label>
+
+{{ form.service }}
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label>
+Appointment Date
+</label>
+
+{{ form.appointment_date }}
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label>
+Available Times
+</label>
+
+
+<div id="slots">
+
+<p class="text-muted">
+Choose service and date first
+</p>
+
+</div>
+
+
+</div>
+
+
+
+{{ form.appointment_time.as_hidden }}
+
+
+
+
+<div class="mb-3">
+
+<label>
+Customer Name
+</label>
+
+{{ form.customer_name }}
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label>
+Phone
+</label>
+
+{{ form.customer_phone }}
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label>
+Email
+</label>
+
+{{ form.customer_email }}
+
+</div>
+
+
+
+
+<button class="btn btn-primary w-100">
+
+Book Appointment
+
+</button>
+
+
 
 </form>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+const service = document.getElementById(
+    "id_service"
+);
+
+
+const date = document.getElementById(
+    "id_appointment_date"
+);
+
+
+const slotsBox = document.getElementById(
+    "slots"
+);
+
+
+const timeInput = document.getElementById(
+    "id_appointment_time"
+);
+
+
+
+function loadSlots(){
+
+
+    if(
+        !service.value ||
+        !date.value
+    ){
+
+        return;
+
+    }
+
+
+    fetch(
+        `/available-slots/{{ business.id }}/?service=${service.value}&date=${date.value}`
+    )
+
+
+    .then(response => response.json())
+
+
+    .then(data => {
+
+
+        slotsBox.innerHTML = "";
+
+
+        if(data.slots.length === 0){
+
+            slotsBox.innerHTML =
+            "<p>No available times</p>";
+
+            return;
+
+        }
+
+
+
+        data.slots.forEach(slot => {
+
+
+            let button =
+            document.createElement(
+                "button"
+            );
+
+
+            button.type = "button";
+
+            button.className =
+            "btn btn-outline-primary me-2 mb-2";
+
+
+            button.innerText = slot;
+
+
+
+            button.onclick = function(){
+
+
+                timeInput.value = slot;
+
+
+                document.querySelectorAll(
+                    "#slots button"
+                ).forEach(
+                    b => b.classList.remove(
+                        "active"
+                    )
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+            };
+
+
+            slotsBox.appendChild(
+                button
+            );
+
+
+        });
+
+
+    });
+
+
+}
+
+
+
+service.addEventListener(
+    "change",
+    loadSlots
+);
+
+
+date.addEventListener(
+    "change",
+    loadSlots
+);
+
+
+</script>
+
+
 
 {% endblock %}

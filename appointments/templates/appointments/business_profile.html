@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+{{ business.name }}
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h1 class="fw-bold">
+            {{ business.name }}
+        </h1>
+
+        <p class="text-muted">
+            {{ business.category }}
+        </p>
+
+
+        <p>
+            📞 {{ business.phone }}
+        </p>
+
+
+        <p>
+            📍 {{ business.address }}
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h3 class="mb-3">
+            Opening Hours
+        </h3>
+
+
+        {% for hour in business.working_hours.all %}
+
+        <div class="d-flex justify-content-between border-bottom py-2">
+
+            <span>
+                {{ hour.day }}
+            </span>
+
+
+            {% if hour.is_closed %}
+
+            <span class="text-danger">
+                Closed
+            </span>
+
+
+            {% else %}
+
+            <span>
+                {{ hour.open_time }} - {{ hour.close_time }}
+            </span>
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% empty %}
+
+        <p>
+            Working hours not available.
+        </p>
+
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+
+
+
+<h3 class="mb-3">
+    Services
+</h3>
+
+
+
+<div class="row">
+
+
+{% for service in business.services.all %}
+
+
+<div class="col-md-6 mb-3">
+
+
+<div class="card shadow-sm">
+
+
+<div class="card-body">
+
+
+<h4>
+✂️ {{ service.name }}
+</h4>
+
+
+<p>
+💰 Price: {{ service.price }}
+</p>
+
+
+<p>
+⏱ Duration: {{ service.duration }} minutes
+</p>
+
+
+
+<a href="{% url 'book_appointment' business.id %}"
+class="btn btn-primary">
+
+Book Now
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+{% empty %}
+
+
+<p>
+No services available.
+</p>
+
+
+{% endfor %}
+
+
+</div>
+
+
+{% endblock %}
