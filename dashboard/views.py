@@ -1,8 +1,7 @@
 from datetime import date
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
 from appointments.models import Appointment
 
 from .forms import BusinessForm
@@ -115,8 +114,123 @@ def services(request):
             "services": services,
         }
     )
+@login_required
+def edit_service(request, service_id):
 
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
 
+    service = get_object_or_404(
+        Service,
+        id=service_id,
+        business=business
+    )
+
+    if request.method == "POST":
+
+        form = ServiceForm(
+            request.POST,
+            instance=service
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect("services")
+
+    else:
+
+        form = ServiceForm(
+            instance=service
+        )
+
+    return render(
+        request,
+        "dashboard/edit_service.html",
+        {
+            "form": form,
+            "service": service,
+        }
+    )
+@login_required
+def delete_service(request, service_id):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    service = get_object_or_404(
+        Service,
+        id=service_id,
+        business=business
+    )
+
+    service.delete()
+
+    return redirect("services")
+
+@login_required
+def edit_working_hour(request, hour_id):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    hour = get_object_or_404(
+        WorkingHour,
+        id=hour_id,
+        business=business
+    )
+
+    if request.method == "POST":
+
+        form = WorkingHourForm(
+            request.POST,
+            instance=hour
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect("working_hours")
+
+    else:
+
+        form = WorkingHourForm(
+            instance=hour
+        )
+
+    return render(
+        request,
+        "dashboard/edit_working_hour.html",
+        {
+            "form": form,
+            "hour": hour,
+        }
+    )
+@login_required
+def delete_working_hour(request, hour_id):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    hour = get_object_or_404(
+        WorkingHour,
+        id=hour_id,
+        business=business
+    )
+
+    hour.delete()
+
+    return redirect("working_hours")
 @login_required
 def working_hours(request):
 
