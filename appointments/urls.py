@@ -44,5 +44,14 @@ path(
     views.available_slots,
     name="available_slots",
 ),
-
+path(
+    "schedule/",
+    views.daily_schedule,
+    name="daily_schedule",
+),
+path(
+    "schedule/",
+    views.daily_schedule,
+    name="daily_schedule",
+),
 ]

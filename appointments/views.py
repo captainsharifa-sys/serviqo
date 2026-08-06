@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse
-from datetime import datetime
+from datetime import datetime, date
 from .utils import generate_time_slots
 
 from dashboard.models import Business, Service
@@ -144,24 +144,22 @@ def available_slots(request, business_id):
     service_id = request.GET.get("service")
     appointment_date = request.GET.get("date")
 
-
     if not service_id or not appointment_date:
         return JsonResponse(
-            {"slots": []}
+            {
+                "slots": []
+            }
         )
-
 
     service = get_object_or_404(
         Service,
         id=service_id
     )
 
-
     date_object = datetime.strptime(
         appointment_date,
         "%Y-%m-%d"
     ).date()
-
 
     slots = generate_time_slots(
         business,
@@ -169,10 +167,33 @@ def available_slots(request, business_id):
         date_object
     )
 
-
     return JsonResponse(
         {
             "slots": slots
         }
     )
- 
+
+
+@login_required
+def daily_schedule(request):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    appointments = Appointment.objects.filter(
+        business=business,
+        appointment_date=date.today()
+    ).order_by(
+        "appointment_time"
+    )
+
+    return render(
+        request,
+        "appointments/daily_schedule.html",
+        {
+            "appointments": appointments,
+            "today": date.today(),
+        }
+    )

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}
+Daily Schedule
+{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4">
+    📅 Today's Schedule
+</h2>
+
+<p class="text-muted">
+    {{ today }}
+</p>
+
+{% if appointments %}
+
+<div class="card">
+
+    <div class="card-body">
+
+        <table class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+                    <th>Time</th>
+                    <th>Customer</th>
+                    <th>Service</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for appointment in appointments %}
+
+                <tr>
+
+                    <td>
+                        {{ appointment.appointment_time }}
+                    </td>
+
+                    <td>
+                        {{ appointment.customer_name }}
+                    </td>
+
+                    <td>
+                        {{ appointment.service.name }}
+                    </td>
+
+                    <td>
+
+                        {% if appointment.status == "Confirmed" %}
+                            <span class="badge bg-success">Confirmed</span>
+
+                        {% elif appointment.status == "Pending" %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+
+                        {% elif appointment.status == "Cancelled" %}
+                            <span class="badge bg-danger">Cancelled</span>
+
+                        {% else %}
+                            <span class="badge bg-primary">Completed</span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+
+No appointments scheduled for today.
+
+</div>
+
+{% endif %}
+
+{% endblock %}
