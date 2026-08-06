@@ -6,56 +6,76 @@ Dashboard
 
 {% block content %}
 
-<h2 class="mb-4">
-    👋 Welcome, {{ request.user.username }}
+<h2 class="fw-bold mb-1">
+    Welcome back, {{ request.user.username }} 👋
 </h2>
 
+<p class="text-muted mb-4">
+    Here's what's happening in your business today.
+</p>
 
 {% if business %}
 
-<div class="card shadow-sm mb-4">
+<div class="card mb-4">
 
     <div class="card-body">
 
-        <h3>{{ business.name }}</h3>
+        <div class="row align-items-center">
 
-        <p class="text-muted">
+            <div class="col-md-8">
 
-            {{ business.category }}
+                <h3 class="fw-bold text-primary">
+                    {{ business.name }}
+                </h3>
 
-        </p>
+                <p class="text-muted mb-1">
+                    {{ business.category }}
+                </p>
 
-        <p>
+                <p class="mb-1">
+                    📞 {{ business.phone }}
+                </p>
 
-            📞 {{ business.phone }}
+                <p class="mb-0">
+                    📍 {{ business.address }}
+                </p>
 
-        </p>
+            </div>
 
-        <p>
+            <div class="col-md-4 text-end">
 
-            📍 {{ business.address }}
+                <span class="badge bg-success fs-6">
+                    Active Business
+                </span>
 
-        </p>
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 
-<div class="row">
 
-<div class="col-md-4 mb-3">
+<div class="row g-4">
 
-<div class="card border-0 shadow">
+<div class="col-md-4">
+
+<div class="card h-100">
 
 <div class="card-body text-center">
 
-<h5>Total Services</h5>
+<div style="font-size:40px;">
+💼
+</div>
 
-<h1 class="text-primary">
+<h6 class="text-muted mt-3">
+Services
+</h6>
 
+<h1 class="fw-bold text-primary">
 {{ total_services }}
-
 </h1>
 
 </div>
@@ -66,18 +86,22 @@ Dashboard
 
 
 
-<div class="col-md-4 mb-3">
+<div class="col-md-4">
 
-<div class="card border-0 shadow">
+<div class="card h-100">
 
 <div class="card-body text-center">
 
-<h5>Working Days</h5>
+<div style="font-size:40px;">
+🗓️
+</div>
 
-<h1 class="text-success">
+<h6 class="text-muted mt-3">
+Working Days
+</h6>
 
+<h1 class="fw-bold text-success">
 {{ total_working_hours }}
-
 </h1>
 
 </div>
@@ -88,18 +112,23 @@ Dashboard
 
 
 
-<div class="col-md-4 mb-3">
 
-<div class="card border-0 shadow">
+<div class="col-md-4">
+
+<div class="card h-100">
 
 <div class="card-body text-center">
 
-<h5>Appointments</h5>
+<div style="font-size:40px;">
+📅
+</div>
 
-<h1 class="text-danger">
+<h6 class="text-muted mt-3">
+Appointments
+</h6>
 
+<h1 class="fw-bold text-danger">
 {{ total_appointments }}
-
 </h1>
 
 </div>
@@ -111,120 +140,170 @@ Dashboard
 </div>
 
 
-<div class="mt-5">
 
-<h4>
+<div class="card mt-5">
 
-Quick Actions
+<div class="card-body">
+
+<h4 class="mb-4 fw-bold">
+
+⚡ Quick Actions
 
 </h4>
 
-<a href="{% url 'services' %}" class="btn btn-primary me-2">
+<div class="d-flex flex-wrap gap-3">
+
+<a href="{% url 'services' %}"
+class="btn btn-primary">
+
 Manage Services
+
 </a>
 
-<a href="{% url 'working_hours' %}" class="btn btn-success me-2">
+
+<a href="{% url 'working_hours' %}"
+class="btn btn-outline-primary">
+
 Working Hours
+
 </a>
 
-<a href="{% url 'appointments' %}" class="btn btn-warning">
+
+<a href="{% url 'appointments' %}"
+class="btn btn-dark">
+
 Appointments
+
 </a>
 
 </div>
 
-{% else %}
-
-<div class="alert alert-warning">
-
-You haven't created a business yet.
+</div>
 
 </div>
 
-<a href="{% url 'create_business' %}" class="btn btn-primary">
 
-Create Business
 
-</a>
-
-{% endif %}
 <hr class="my-5">
 
-<h3 class="mb-4">
-    📅 Today's Appointments
+
+<h3 class="fw-bold mb-4">
+
+Today's Appointments
+
 </h3>
 
 
 {% if today_appointments %}
 
-<div class="card shadow-sm">
+<div class="row">
 
-    <div class="card-body">
+{% for appointment in today_appointments %}
 
+<div class="col-md-6 mb-3">
 
-        <table class="table table-hover">
+<div class="card h-100">
 
-            <thead>
+<div class="card-body">
 
-                <tr>
-                    <th>Time</th>
-                    <th>Customer</th>
-                    <th>Service</th>
-                    <th>Phone</th>
-                </tr>
+<div class="d-flex justify-content-between">
 
-            </thead>
+<h5 class="fw-bold">
 
+{{ appointment.customer_name }}
 
-            <tbody>
+</h5>
 
-            {% for appointment in today_appointments %}
+<span class="badge bg-primary">
 
-                <tr>
+{{ appointment.status }}
 
-                    <td>
-                        {{ appointment.appointment_time }}
-                    </td>
-
-
-                    <td>
-                        {{ appointment.customer_name }}
-                    </td>
-
-
-                    <td>
-                        {{ appointment.service.name }}
-                    </td>
-
-
-                    <td>
-                        {{ appointment.customer_phone }}
-                    </td>
-
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-
-        </table>
-
-
-    </div>
+</span>
 
 </div>
+
+<p class="text-muted mb-2">
+
+{{ appointment.service.name }}
+
+</p>
+
+<p class="mb-1">
+
+🕒 {{ appointment.appointment_time }}
+
+</p>
+
+<p class="mb-0">
+
+📞 {{ appointment.customer_phone }}
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="card">
+
+<div class="card-body text-center">
+
+<h5>
+
+🎉 You're all caught up!
+
+</h5>
+
+<p class="text-muted">
+
+No appointments scheduled for today.
+
+</p>
+
+</div>
+
+</div>
+
+{% endif %}
 
 
 {% else %}
 
+<div class="card">
 
-<div class="alert alert-info">
+<div class="card-body text-center">
 
-    No appointments scheduled for today.
+<h3>
+
+Welcome to Serviqo 💜
+
+</h3>
+
+<p class="text-muted">
+
+Create your first business to start accepting bookings.
+
+</p>
+
+<a href="{% url 'create_business' %}"
+class="btn btn-primary">
+
+Create Business
+
+</a>
 
 </div>
 
+</div>
 
 {% endif %}
+
 {% endblock %}
