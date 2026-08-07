@@ -6,7 +6,7 @@ from datetime import datetime, date
 from .utils import generate_time_slots
 
 from dashboard.models import Business, Service
-from .models import Appointment
+from .models import Appointment,Customer
 from .forms import AppointmentForm
  
 
@@ -27,7 +27,24 @@ def book_appointment(request, business_id):
         if form.is_valid():
 
             appointment = form.save(commit=False)
+
             appointment.business = business
+
+            customer, created = Customer.objects.get_or_create(
+
+                business=business,
+
+                phone=appointment.customer_phone,
+
+                defaults={
+                    "name": appointment.customer_name,
+                    "email": appointment.customer_email,
+                }
+
+            )
+
+            appointment.customer = customer
+
             appointment.save()
 
             return redirect(
@@ -49,7 +66,6 @@ def book_appointment(request, business_id):
             "form": form,
         }
     )
-
 
 @login_required
 def appointments_list(request):
@@ -73,7 +89,6 @@ def appointments_list(request):
             "appointments": appointments
         }
     )
-
 
 @login_required
 def confirm_appointment(request, appointment_id):

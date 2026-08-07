@@ -49,4 +49,14 @@ path(
     views.delete_working_hour,
     name="delete_working_hour",
 ),
+path(
+    "customers/",
+    views.customers,
+    name="customers",
+),
+path(
+    "customers/<int:customer_id>/",
+    views.customer_detail,
+    name="customer_detail",
+),
 ]

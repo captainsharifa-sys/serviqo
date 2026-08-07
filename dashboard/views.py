@@ -2,7 +2,7 @@ from datetime import date
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from appointments.models import Appointment
+from appointments.models import Appointment,Customer
 
 from .forms import BusinessForm
 from .service_forms import ServiceForm
@@ -262,5 +262,50 @@ def working_hours(request):
         {
             "form": form,
             "hours": hours,
+        }
+    )
+@login_required
+def customers(request):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    customers = Customer.objects.filter(
+        business=business
+    ).order_by("name")
+
+    return render(
+        request,
+        "dashboard/customers.html",
+        {
+            "customers": customers,
+        }
+    )
+@login_required
+def customer_detail(request, customer_id):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    customer = get_object_or_404(
+        Customer,
+        id=customer_id,
+        business=business
+    )
+
+    appointments = Appointment.objects.filter(
+        customer=customer
+    ).order_by("-appointment_date", "-appointment_time")
+
+    return render(
+        request,
+        "dashboard/customer_detail.html",
+        {
+            "customer": customer,
+            "appointments": appointments,
         }
     )
