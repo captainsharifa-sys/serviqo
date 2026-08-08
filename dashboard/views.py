@@ -7,7 +7,8 @@ from appointments.models import Appointment,Customer
 from .forms import BusinessForm
 from .service_forms import ServiceForm
 from .working_forms import WorkingHourForm
-from .models import Business, Service, WorkingHour
+from .models import Business, Service, WorkingHour,Staff
+from .staff_forms import StaffForm
 
 
 @login_required
@@ -272,15 +273,42 @@ def customers(request):
         owner=request.user
     )
 
+    search = request.GET.get("search", "")
+
     customers = Customer.objects.filter(
         business=business
-    ).order_by("name")
+    )
+
+    if search:
+
+        customers = customers.filter(
+            name__icontains=search
+        )
+
+    customers = customers.order_by("name")
+
+    total_customers = Customer.objects.filter(
+        business=business
+    ).count()
+
+    returning_customers = Customer.objects.filter(
+    business=business
+).count()
+
+    today_customers = Appointment.objects.filter(
+        business=business,
+        appointment_date=date.today()
+    ).values("customer").distinct().count()
 
     return render(
         request,
         "dashboard/customers.html",
         {
             "customers": customers,
+            "search": search,
+            "total_customers": total_customers,
+            "returning_customers": returning_customers,
+            "today_customers": today_customers,
         }
     )
 @login_required
@@ -299,7 +327,19 @@ def customer_detail(request, customer_id):
 
     appointments = Appointment.objects.filter(
         customer=customer
-    ).order_by("-appointment_date", "-appointment_time")
+    ).order_by(
+        "-appointment_date",
+        "-appointment_time"
+    )
+
+    total_visits = appointments.count()
+
+    total_spent = sum(
+        appointment.service.price
+        for appointment in appointments
+    )
+
+    last_visit = appointments.first()
 
     return render(
         request,
@@ -307,5 +347,126 @@ def customer_detail(request, customer_id):
         {
             "customer": customer,
             "appointments": appointments,
+            "total_visits": total_visits,
+            "total_spent": total_spent,
+            "last_visit": last_visit,
         }
     )
+@login_required
+def staff(request):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    staff_members = Staff.objects.filter(
+        business=business
+    ).order_by("name")
+
+    return render(
+        request,
+        "dashboard/staff.html",
+        {
+            "staff_members": staff_members,
+        }
+    )
+
+
+@login_required
+def add_staff(request):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    if request.method == "POST":
+
+        form = StaffForm(request.POST)
+
+        if form.is_valid():
+
+            staff_member = form.save(
+                commit=False
+            )
+
+            staff_member.business = business
+
+            staff_member.save()
+
+            return redirect("staff")
+
+    else:
+
+        form = StaffForm()
+
+    return render(
+        request,
+        "dashboard/add_staff.html",
+        {
+            "form": form,
+        }
+    )
+
+
+@login_required
+def edit_staff(request, staff_id):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    staff_member = get_object_or_404(
+        Staff,
+        id=staff_id,
+        business=business
+    )
+
+    if request.method == "POST":
+
+        form = StaffForm(
+            request.POST,
+            instance=staff_member
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect("staff")
+
+    else:
+
+        form = StaffForm(
+            instance=staff_member
+        )
+
+    return render(
+        request,
+        "dashboard/edit_staff.html",
+        {
+            "form": form,
+            "staff_member": staff_member,
+        }
+    )
+
+
+@login_required
+def delete_staff(request, staff_id):
+
+    business = get_object_or_404(
+        Business,
+        owner=request.user
+    )
+
+    staff_member = get_object_or_404(
+        Staff,
+        id=staff_id,
+        business=business
+    )
+
+    staff_member.delete()
+
+    return redirect("staff")

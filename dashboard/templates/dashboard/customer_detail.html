@@ -6,52 +6,106 @@
 
 {% block content %}
 
-<h2 class="mb-4">
-    👤 {{ customer.name }}
-</h2>
-
 <div class="card shadow-sm border-0 mb-4">
 
     <div class="card-body">
 
+        <h3 class="mb-3">
+            {{ customer.name }}
+        </h3>
+
         <p>
-            <strong>Phone:</strong>
+            <strong>📞 Phone:</strong>
             {{ customer.phone }}
         </p>
 
         <p>
-            <strong>Email:</strong>
+            <strong>✉️ Email:</strong>
             {{ customer.email|default:"Not provided" }}
         </p>
+<p>
+    <strong>⭐ Favorite Service:</strong>
 
-        <p>
-            <strong>Total Visits:</strong>
-            {{ appointments.count }}
-        </p>
+    {% if customer.favorite_service %}
+        {{ customer.favorite_service.name }}
+    {% else %}
+        No favorite service yet
+    {% endif %}
+</p>
+        <hr>
+
+        <div class="row text-center">
+
+            <div class="col-md-4">
+
+                <h6 class="text-muted">
+                    Total Visits
+                </h6>
+
+                <h3 class="text-primary">
+                    {{ total_visits }}
+                </h3>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <h6 class="text-muted">
+                    Total Spent
+                </h6>
+
+                <h3 class="text-success">
+                    ${{ total_spent }}
+                </h3>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <h6 class="text-muted">
+                    Last Visit
+                </h6>
+
+                <h6>
+
+                    {% if last_visit %}
+
+                        {{ last_visit.appointment_date }}
+
+                    {% else %}
+
+                        Never
+
+                    {% endif %}
+
+                </h6>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
-<h3 class="mb-3">
-    Appointment History
-</h3>
 
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm">
 
     <div class="card-body">
+
+        <h4 class="mb-3">
+            Appointment History
+        </h4>
 
         <table class="table table-hover">
 
             <thead>
 
                 <tr>
-
                     <th>Date</th>
                     <th>Time</th>
                     <th>Service</th>
                     <th>Status</th>
-
                 </tr>
 
             </thead>
@@ -77,9 +131,7 @@
                 <tr>
 
                     <td colspan="4" class="text-center">
-
                         No appointments yet.
-
                     </td>
 
                 </tr>

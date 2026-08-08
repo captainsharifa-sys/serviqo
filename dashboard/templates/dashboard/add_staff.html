@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Staff | Serviqo
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            Add Staff Member
+        </h2>
+
+        <p class="text-muted">
+            Add someone to your business team.
+        </p>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Add Staff
+                    </button>
+
+                    <a
+                        href="{% url 'staff' %}"
+                        class="btn btn-outline-secondary ms-2"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -16,6 +16,7 @@ urlpatterns = [
         name="appointments",
     ),
 
+
     path(
         "appointments/<int:appointment_id>/confirm/",
         views.confirm_appointment,
@@ -50,8 +51,13 @@ path(
     name="daily_schedule",
 ),
 path(
-    "schedule/",
-    views.daily_schedule,
-    name="daily_schedule",
+    "weekly-schedule/",
+    views.weekly_schedule,
+    name="weekly_schedule",
+),
+path(
+    "appointments/<int:appointment_id>/edit/",
+    views.edit_appointment,
+    name="edit_appointment",
 ),
 ]

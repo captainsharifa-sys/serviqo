@@ -6,6 +6,91 @@ Customers
 
 {% block content %}
 
+<div class="row mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Total Customers
+                </h6>
+
+                <h2 class="text-primary">
+                    {{ total_customers }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Returning Customers
+                </h6>
+
+                <h2 class="text-success">
+                    {{ returning_customers }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Today's Customers
+                </h6>
+
+                <h2 class="text-purple">
+                    {{ today_customers }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<form method="GET" class="mb-4">
+
+    <div class="input-group">
+
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search customer..."
+            value="{{ search }}">
+
+        <button
+            class="btn btn-primary">
+
+            Search
+
+        </button>
+
+    </div>
+
+</form>
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <div>

@@ -35,20 +35,16 @@ class Business(models.Model):
         auto_now_add=True
     )
 
-
     def save(self, *args, **kwargs):
 
         if not self.slug:
-
             self.slug = slugify(self.name)
 
         super().save(*args, **kwargs)
 
-
     def __str__(self):
 
         return self.name
-
 
 
 class Service(models.Model):
@@ -76,11 +72,9 @@ class Service(models.Model):
         auto_now_add=True
     )
 
-
     def __str__(self):
 
         return self.name
-
 
 
 class WorkingHour(models.Model):
@@ -94,7 +88,6 @@ class WorkingHour(models.Model):
         ("Saturday", "Saturday"),
         ("Sunday", "Sunday"),
     ]
-
 
     business = models.ForeignKey(
         Business,
@@ -115,7 +108,6 @@ class WorkingHour(models.Model):
         default=False
     )
 
-
     class Meta:
 
         unique_together = (
@@ -123,7 +115,51 @@ class WorkingHour(models.Model):
             "day"
         )
 
-
     def __str__(self):
 
         return f"{self.business.name} - {self.day}"
+
+
+class Staff(models.Model):
+
+    business = models.ForeignKey(
+        Business,
+        on_delete=models.CASCADE,
+        related_name="staff_members"
+    )
+
+    name = models.CharField(
+        max_length=100
+    )
+
+    phone = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
+    email = models.EmailField(
+        blank=True
+    )
+
+    job_title = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    services = models.ManyToManyField(
+        Service,
+        blank=True,
+        related_name="staff_members"
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return self.name

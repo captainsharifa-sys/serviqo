@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}
+Weekly Schedule
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-1">
+            📅 Weekly Schedule
+        </h2>
+
+        <p class="text-muted mb-0">
+            {{ week_start|date:"M d, Y" }}
+            —
+            {{ week_end|date:"M d, Y" }}
+        </p>
+
+    </div>
+
+
+    <!-- Week Navigation -->
+    <div class="d-flex gap-2">
+
+        <a
+            href="?date={{ previous_week|date:'Y-m-d' }}"
+            class="btn btn-outline-secondary"
+        >
+            ← Previous
+        </a>
+
+
+        <a
+            href="?date={{ today|date:'Y-m-d' }}"
+            class="btn btn-primary"
+        >
+            Today
+        </a>
+
+
+        <a
+            href="?date={{ next_week|date:'Y-m-d' }}"
+            class="btn btn-outline-secondary"
+        >
+            Next →
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Weekly Calendar -->
+
+<div class="row g-3">
+
+{% for day in week_days %}
+
+    <div class="col-md-6 col-lg">
+
+        <div class="card shadow-sm h-100">
+
+            <!-- Day Header -->
+
+            <div class="card-header text-center">
+
+                <strong>
+                    {{ day.date|date:"l" }}
+                </strong>
+
+                <br>
+
+                <small class="text-muted">
+                    {{ day.date|date:"M d" }}
+                </small>
+
+            </div>
+
+
+            <!-- Appointments -->
+
+            <div class="card-body">
+
+                {% for appointment in day.appointments %}
+
+                    <div class="border rounded p-2 mb-2">
+
+                        <!-- Time -->
+
+                        <strong>
+                            🕐 {{ appointment.appointment_time }}
+                        </strong>
+
+                        <br>
+
+
+                        <!-- Customer -->
+
+                        <span>
+                            👤 {{ appointment.customer_name }}
+                        </span>
+
+                        <br>
+
+
+                        <!-- Service -->
+
+                        <small class="text-muted">
+                            {{ appointment.service.name }}
+                        </small>
+
+                        <br>
+
+
+                        <!-- Status -->
+
+                        {% if appointment.status == "Confirmed" %}
+
+                            <span class="badge bg-success mt-1">
+                                Confirmed
+                            </span>
+
+
+                        {% elif appointment.status == "Pending" %}
+
+                            <span class="badge bg-warning text-dark mt-1">
+                                Pending
+                            </span>
+
+
+                        {% elif appointment.status == "Cancelled" %}
+
+                            <span class="badge bg-danger mt-1">
+                                Cancelled
+                            </span>
+
+
+                        {% elif appointment.status == "Completed" %}
+
+                            <span class="badge bg-primary mt-1">
+                                Completed
+                            </span>
+
+
+                        {% endif %}
+
+                    </div>
+
+
+                {% empty %}
+
+                    <p class="text-muted text-center small mb-0">
+                        No appointments
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

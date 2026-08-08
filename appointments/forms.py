@@ -68,7 +68,9 @@ class AppointmentForm(forms.ModelForm):
             and appointment_time
         ):
 
+            # --------------------------------
             # Check working hours
+            # --------------------------------
 
             day_name = appointment_date.strftime("%A")
 
@@ -106,12 +108,16 @@ class AppointmentForm(forms.ModelForm):
                 )
 
 
+            # --------------------------------
             # Check duplicate bookings
+            # --------------------------------
 
             exists = Appointment.objects.filter(
                 business=self.business,
                 appointment_date=appointment_date,
                 appointment_time=appointment_time,
+            ).exclude(
+                pk=self.instance.pk
             ).exists()
 
 

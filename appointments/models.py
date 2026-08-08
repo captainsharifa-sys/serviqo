@@ -1,6 +1,7 @@
 from django.db import models
 from dashboard.models import Business, Service
 
+
 class Customer(models.Model):
 
     business = models.ForeignKey(
@@ -21,12 +22,21 @@ class Customer(models.Model):
         blank=True
     )
 
+    favorite_service = models.ForeignKey(
+        Service,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="favorite_customers"
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
 
     def __str__(self):
         return self.name
+
 
 class Appointment(models.Model):
 
@@ -46,19 +56,26 @@ class Appointment(models.Model):
         Service,
         on_delete=models.CASCADE
     )
+
     customer = models.ForeignKey(
-    Customer,
-    on_delete=models.CASCADE,
-    related_name="appointments",
-    null=True,
-    blank=True,
-)
+        Customer,
+        on_delete=models.CASCADE,
+        related_name="appointments",
+        null=True,
+        blank=True,
+    )
 
-    customer_name = models.CharField(max_length=100)
+    customer_name = models.CharField(
+        max_length=100
+    )
 
-    customer_phone = models.CharField(max_length=30)
+    customer_phone = models.CharField(
+        max_length=30
+    )
 
-    customer_email = models.EmailField(blank=True)
+    customer_email = models.EmailField(
+        blank=True
+    )
 
     appointment_date = models.DateField()
 
@@ -70,7 +87,9 @@ class Appointment(models.Model):
         default="Pending"
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
         return f"{self.customer_name} - {self.service.name}"
